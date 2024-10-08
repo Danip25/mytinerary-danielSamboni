@@ -19,7 +19,7 @@ const HeroBanner = () => {
       className="absolute top-0 left-0 h-[100vh] flex-1 object-cover w-full"
     ></video>
     <article className="z-[2] w-full h-full bg-[#0002] backdrop-blur-sm flex-1 flex flex-col gap-4 p-4 justify-center items-center m-auto">
-      <h1 className="text-white text-6xl font-bold">My Trips</h1>
+      <h1 className="text-white text-6xl font-bold">MyTinerary</h1>
       <p className="text-white text-xl">
       Find your perfect trip, designed by insiders who know and love their cities!
       </p>
