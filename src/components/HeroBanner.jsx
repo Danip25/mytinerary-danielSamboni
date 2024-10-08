@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import FligthVideo from "../assets/flight.mp4";
+import { FaArrowRightToCity } from "react-icons/fa6";
 
 const HeroBanner = () => {
 
@@ -24,10 +25,10 @@ const HeroBanner = () => {
       Find your perfect trip, designed by insiders who know and love their cities!
       </p>
       <button
-        className="bg-blue-600 text-white px-4 py-2 rounded-md mt-4"
+        className="bg-blue-600 text-white px-4 py-2 rounded-md mt-4 flex flex-nowrap items-center hover:bg-blue-900"
         onClick={handleNavigation}
       >
-        Explore Now
+        Explore Now! &nbsp; <FaArrowRightToCity />
       </button>
     </article>
   </section>
