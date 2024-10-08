@@ -1,0 +1,86 @@
+[
+    {
+      "city": "Rome",
+      "country": "Italy",
+      "place": "Colosseum",
+      "favorite": false,
+      "image": "https://cdn.mos.cms.futurecdn.net/BiNbcY5fXy9Lra47jqHKGK.jpg"
+    },
+    {
+      "city": "New York City",
+      "country": "United States",
+      "place": "Times Square",
+      "favorite": false,
+      "image": "https://cdn.britannica.com/66/154566-050-36E73C15/Times-Square-New-York-City.jpg"
+    },
+    {
+      "city": "Paris",
+      "country": "France",
+      "place": "Eiffel Tower",
+      "favorite": false,
+      "image": "https://images.skyscrapercenter.com/building/eiffeltower_overall2_mg.jpg"
+    },
+    {
+      "city": "Tokyo",
+      "country": "Japan",
+      "place": "Shibuya Crossing",
+      "favorite": false,
+      "image": "https://www.airpano.com/files/shibuya_1_big.jpg"
+    },
+    {
+      "city": "Machu Picchu",
+      "country": "Peru",
+      "place": "Inca Citadel",
+      "favorite": false,
+      "image": "https://www.auriperu.com/wp-content/uploads/2022/04/Machu-Picchu-citadel-by-Auri-Peru.jpg"
+    },
+    {
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "place": "Copacabana Beach",
+      "favorite": false,
+      "image": "https://images.squarespace-cdn.com/content/v1/63b42d68124e4755513cecb9/c4833e41-a256-41d8-8dd9-815a683a2ed3/copacabana-beach.jpg"
+    },
+    {
+      "city": "Sydney",
+      "country": "Australia",
+      "place": "Sydney Opera House",
+      "favorite": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Sydney_Australia._%2821339175489%29.jpg"
+    },
+    {
+      "city": "London",
+      "country": "United Kingdom",
+      "place": "Buckingham Palace",
+      "favorite": false,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Buckingham_Palace_UK.jpg/1200px-Buckingham_Palace_UK.jpg"
+    },
+    {
+      "city": "Beijing",
+      "country": "China",
+      "place": "Forbidden City",
+      "favorite": false,
+      "image": "https://magnifissance.com/wp-content/uploads/2021/12/5-%C2%A9-Haiwei-Hu-Getty-1.jpg"
+    },
+    {
+      "city": "Marrakech",
+      "country": "Morocco",
+      "place": "Jemaa el-Fnaa Square",
+      "favorite": false,
+      "image": "https://www.ilove-marrakech.com/blog/wp-content/uploads/2024/07/What-makes-Jemaa-el-Fna-in-Marrakech-so-special.png"
+    },
+    {
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "place": "Canals",
+      "favorite": false,
+      "image": "https://www.holland.com/upload_mm/2/0/f/68376_fullimage_boat%20amsterdam%20canals_1150x663.jpg"
+    },
+    {
+      "city": "Barcelona",
+      "country": "Spain",
+      "place": "Park Guell",
+      "favorite": false,
+      "image": "https://www.barcelo.com/guia-turismo/wp-content/uploads/park-guell-1.jpg"
+    }
+  ]
