@@ -75,8 +75,8 @@ const CitiesPage = () => {
                   onChange={(e) => setSortOrder(e.target.value)}
                   disabled={!sortByName}
                 >
-                  <option value="1">Ascendente</option>
-                  <option value="-1">Descendente</option>
+                  <option value="1">Ascending</option>
+                  <option value="-1">Descending</option>
                 </select>
               </label>
               </section>
