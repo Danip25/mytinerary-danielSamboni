@@ -1,52 +1,82 @@
-import { useCallback, useEffect, useState } from "react";
-import { getCities, setFavorite } from "../services/cities.services";
-import ImageCard from "../components/ImageCard";
-import FiltersBar from "../components/FiltersBar";
-import { useNavigate } from "react-router-dom";
-import Loader from "../components/Loader";
-import Toggle from "../components/Toggle";
+import { useEffect, useMemo, useState } from 'react';
+import ImageCard from '../components/ImageCard';
+import FiltersBar from '../components/FiltersBar';
+import { useNavigate } from 'react-router-dom';
+import Loader from '../components/Loader';
+import Toggle from '../components/Toggle';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  filterCitiesAction,
+  viewCityAction,
+} from '../store/actions/cities.actions';
 
 const CitiesPage = () => {
-  const [cities, setCities] = useState([]);
-  const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [cities, setCities] = useState([]);
+  const [search, setSearch] = useState('');
   const [getFavorites, setGetFavorites] = useState(false);
   const [sortByName, setSortByName] = useState(false);
-  const [sortOrder, setSortOrder] = useState("1");
+  const [sortOrder, setSortOrder] = useState('1');
+
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.loading);
+  const cities = useSelector(state => state.cities);
+
+  const filteredCities = useSelector(state => state.filteredCities);
+
+  const citiesToRender = useMemo(() => {
+    if (search || getFavorites || sortByName) return filteredCities;
+    return cities;
+  }, [search, getFavorites, sortByName, filteredCities, cities]);
+
+  useEffect(() => {
+    let sortByNameValue = undefined;
+
+    if (sortByName) {
+      sortByNameValue = sortOrder;
+    }
+
+    dispatch(filterCitiesAction(search, getFavorites, sortByNameValue));
+  }, [search, getFavorites, sortByName, sortOrder, dispatch]);
 
   const navigation = useNavigate();
 
-  const onFav = async (id, favorite) => {
-    try {
-      await setFavorite(id, !favorite);
-      await fetchCities();
-    } catch (error) {
-      console.error(error);
-    }
+  const goToCityDetail = _id => {
+    dispatch(viewCityAction(_id));
+    navigation(`/cities/detail`);
   };
 
-  const fetchCities = useCallback(async () => {
-    try {
-        console.log({sortOrder});
-      setLoading(true);
-      const cities = await getCities({
-        search: search.trim(),
-        getFavorites,
-        sortByName: sortByName ? (sortOrder) : undefined,
-      });
-      setCities(cities);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    }
-  }, [getFavorites, search, sortByName, sortOrder]);
+  // const onFav = async (id, favorite) => {
+  //   try {
+  //     await setFavorite(id, !favorite);
+  //     await fetchCities();
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchCities();
-  }, [fetchCities]);
+  // const fetchCities = useCallback(async () => {
+  //   try {
+  //       console.log({sortOrder});
+  //     setLoading(true);
+  //     const cities = await getCities({
+  //       search: search.trim(),
+  //       getFavorites,
+  //       sortByName: sortByName ? (sortOrder) : undefined,
+  //     });
+  //     setCities(cities);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //     }, 1000);
+
+  //   }
+  // }, [getFavorites, search, sortByName, sortOrder]);
+
+  // useEffect(() => {
+  //   fetchCities();
+  // }, [fetchCities]);
 
   return (
     <div className="flex-1 min-h-[100vh] flex flex-col">
@@ -56,29 +86,23 @@ const CitiesPage = () => {
           value={search}
           buttons={
             <>
-              <Toggle
-                label="See Favorites"
-                onChange={setGetFavorites}
-              />
+              <Toggle label="See Favorites" onChange={setGetFavorites} />
               <section className="flex gap-4 items-center sm:px-4 py-2  rounded-md border border-dashed bg-white">
-              <Toggle
-                label="Sort by name"
-                onChange={setSortByName}
-              />
-              <label
-                htmlFor="sortByName"
-                className="flex items-center cursor-pointer"
-              >
-                <select
-                  id="sortByName"
-                  className="sm:p-2 border border-gray-300 rounded-lg w-full text-xs"
-                  onChange={(e) => setSortOrder(e.target.value)}
-                  disabled={!sortByName}
+                <Toggle label="Sort by name" onChange={setSortByName} />
+                <label
+                  htmlFor="sortByName"
+                  className="flex items-center cursor-pointer"
                 >
-                  <option value="1">Ascending</option>
-                  <option value="-1">Descending</option>
-                </select>
-              </label>
+                  <select
+                    id="sortByName"
+                    className="sm:p-2 border border-gray-300 rounded-lg w-full text-xs"
+                    onChange={e => setSortOrder(e.target.value)}
+                    disabled={!sortByName}
+                  >
+                    <option value="-1">Ascendente</option>
+                    <option value="1">Descendente</option>
+                  </select>
+                </label>
               </section>
             </>
           }
@@ -86,8 +110,8 @@ const CitiesPage = () => {
         {loading && <Loader />}
         {!loading && (
           <section className="w-full p-4 grid sm:grid-cols-3 gap-4 my-4 flex-1">
-            {!!cities.length &&
-              cities.map((city) => (
+            {!!citiesToRender.length &&
+              citiesToRender.map(city => (
                 <main key={city._id} className="flex">
                   <ImageCard
                     key={city._id}
@@ -95,12 +119,12 @@ const CitiesPage = () => {
                     title={city.city}
                     favorite={city.favorite}
                     description={city.description}
-                    onFav={() => onFav(city._id, city.favorite)}
-                    onClick={() => navigation("/cities/" + city._id)}
+                    // onFav={() => onFav(city)}
+                    onClick={() => goToCityDetail(city._id)}
                   />
                 </main>
               ))}
-            {!cities.length && (
+            {!citiesToRender.length && (
               <section className="col-span-3">
                 <h3 className="text-black text-4xl text-center font-bold">
                   OH NO

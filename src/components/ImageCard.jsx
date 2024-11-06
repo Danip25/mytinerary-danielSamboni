@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import { HeartIcon as SolidHeart } from "@heroicons/react/24/solid";
-import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
+import { HeartIcon as SolidHeart } from '@heroicons/react/24/solid';
+import { HeartIcon as OutlineHeart } from '@heroicons/react/24/outline';
 
 const ImageCard = ({
   image,
   title,
-  description = "",
+  description = '',
   favorite = false,
   onFav = () => {},
   onClick = () => {},
@@ -16,9 +16,16 @@ const ImageCard = ({
         className="absolute bg-transparent text-white p-2 rounded-lg w-[40px] h-[40px] z-10"
         onClick={onFav}
       >
-        {favorite ? <SolidHeart color="#fff" className="text-red-600" /> : <OutlineHeart />}
+        {favorite ? (
+          <SolidHeart color="#fff" className="text-red-600" />
+        ) : (
+          <OutlineHeart />
+        )}
       </button>
-      <article className="relative rounded-lg overflow-hidden shadow-md h-full" onClick={onClick}>
+      <article
+        className="relative rounded-lg overflow-hidden shadow-md h-full cursor-pointer hover:outline transition-all outline-gray-300"
+        onClick={onClick}
+      >
         <span className="z-10">
           <img
             src={image}

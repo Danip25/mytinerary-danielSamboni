@@ -1,17 +1,21 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
-import Logo from "../assets/logo.png";
-import { useMemo } from "react";
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import Logo from '../assets/logo.png';
+import { useMemo } from 'react';
+import { HeartIcon } from '@heroicons/react/24/solid';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
+  const favoritesCities = useSelector(state => state.favoritesCities);
   const location = useLocation();
+  const user = false;
 
-  const setAbsolute = useMemo(() => location.pathname === "/", [location]);
+  const setAbsolute = useMemo(() => location.pathname === '/', [location]);
 
   return (
     <nav
       className="w-full bg-zinc-900 text-white flex px-8 py-2 justify-between items-center z-[10000] flex-col sm:flex-row sm:gap-4"
       style={{
-        position: setAbsolute ? "absolute" : "relative",
+        position: setAbsolute ? 'absolute' : 'relative',
       }}
     >
       <NavLink to="/">
@@ -25,7 +29,7 @@ const Navbar = () => {
           <NavLink
             to="/"
             className={({ isActive }) =>
-              isActive ? "border-b border-b-white pb-1" : "pb-1"
+              isActive ? 'border-b border-b-white pb-1' : 'pb-1'
             }
           >
             Home
@@ -35,12 +39,31 @@ const Navbar = () => {
           <NavLink
             to="cities"
             className={({ isActive }) =>
-              isActive ? "border-b border-b-white pb-1" : "pb-1"
+              isActive ? 'border-b border-b-white pb-1' : 'pb-1'
             }
           >
             Cities
           </NavLink>
         </li>
+        {user && (
+          <li>
+            <NavLink
+              to="favorites"
+              className={({ isActive }) =>
+                isActive ? 'border-b border-b-white pb-1' : 'pb-1'
+              }
+            >
+              <span className="relative">
+                <HeartIcon className="w-6 h-6" />
+                {favoritesCities?.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-1">
+                    {favoritesCities?.length}
+                  </span>
+                )}
+              </span>
+            </NavLink>
+          </li>
+        )}
         <li>
           <Link
             to="login"

@@ -1,100 +1,104 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import _cities from "../api/carousel.json";
-import { useNavigate } from "react-router-dom";
-import { getCities } from "../services/cities.services";
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import _cities from '../api/carousel.json';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { viewCityAction } from '../store/actions/cities.actions';
 
 const Carousel = () => {
-  const [isMobile, setIsMobile ] = useState(window.innerWidth < 768)
+  const isMobile = useMemo(() => window.innerWidth < 768, []);
   const citiesPerSlide = useMemo(() => (isMobile ? 2 : 4), [isMobile]); // Número de ciudades por slide
   const [slideActual, setSlideActual] = useState(0);
-  const [cities, setCities] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const loadCities = useSelector(state => state.cities);
+  const isLoading = useSelector(state => state.loading);
+
+  const cities = useMemo(() => {
+    if (!isLoading && loadCities.length === 0) return _cities;
+    return loadCities;
+  }, [loadCities, isLoading]);
 
   const totalSlides = useMemo(
     () => Math.ceil(cities.length / citiesPerSlide),
-    [cities, citiesPerSlide]
+    [cities, citiesPerSlide],
   );
 
   const navigation = useNavigate();
 
-  const fetchCities = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const citiesData = await getCities();
-      console.log(citiesData);
-      setCities(citiesData);
-    } catch (error) {
-      console.error(error);
-      setCities(_cities);
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    }
-  }, []);
+  // const fetchCities = useCallback(async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     const citiesData = await getCities();
+  //     console.log(citiesData);
+  //     setCities(citiesData);
+  //   } catch (error) {
+  //     console.error(error);
+  //     setCities(_cities);
+  //   } finally {
+  //     setTimeout(() => {
+  //       setIsLoading(false);
+  //     }, 1000);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    fetchCities();
-  }, [fetchCities]);
+  // useEffect(() => {
+  //   fetchCities();
+  // }, [fetchCities]);
+
+  const goToDetails = id => {
+    dispatch(viewCityAction(id));
+    navigation(`/cities/${id}`);
+  };
 
   useEffect(() => {
     const intervalo = setInterval(() => {
-      setSlideActual((prevSlide) => (prevSlide + 1) % totalSlides);
+      setSlideActual(prevSlide => (prevSlide + 1) % totalSlides);
     }, 5000);
     return () => clearInterval(intervalo);
   }, [totalSlides, slideActual]);
 
-  useEffect(() => {
-    const resizeHandler = ()=>{
-      setIsMobile(window.innerWidth < 768)
-      }
-  window.addEventListener('resize', resizeHandler)
-    return ()=>{
-      window.removeEventListener('resize', resizeHandler )
-    }
-  }, [])
-
   const handlePrev = () => {
-    setSlideActual((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides);
+    setSlideActual(prevSlide => (prevSlide - 1 + totalSlides) % totalSlides);
   };
 
   const handleNext = useCallback(() => {
-    setSlideActual((prevSlide) => (prevSlide + 1) % totalSlides);
+    setSlideActual(prevSlide => (prevSlide + 1) % totalSlides);
   }, [totalSlides]);
 
   const _renderCities = useCallback(
-    (index) => {
-      const totalCities = cities
-      .slice(index * citiesPerSlide, (index + 1) * citiesPerSlide)
+    index => {
+      const totalCities = cities.slice(
+        index * citiesPerSlide,
+        (index + 1) * citiesPerSlide,
+      );
       return (
         <div
           className={`grid grid-cols-${totalCities.length} gap-4 transition-all fade-custom w-full`}
         >
-          { totalCities
-            .map((city, i) => (
-              <div
-                key={city.place}
-                className="opacity-0 text-center relative rounded-md overflow-hidden transition-all fade-custom"
-                onClick={() =>
-                  cities?.every((c) => Object.keys(c).includes("_id")) &&
-                  navigation(`/cities/${city._id}`)
-                }
-                style={{ animationDelay: i * 0.3 + "s" }}
-              >
-                <img
-                  src={city.image}
-                  alt={city.place}
-                  className="w-full h-96 object-cover"
-                />
-                <p className="absolute text-xs bottom-0 py-4 bg-black text-white w-full px-2">
-                  {city.place}
-                </p>
-              </div>
-            ))}
+          {totalCities.map((city, i) => (
+            <div
+              key={city.place}
+              className="opacity-0 text-center relative rounded-md overflow-hidden transition-all fade-custom"
+              onClick={() =>
+                cities?.every(c => Object.keys(c).includes('_id')) &&
+                goToDetails(city._id)
+              }
+              style={{ animationDelay: i * 0.3 + 's' }}
+            >
+              <img
+                src={city.image}
+                alt={city.place}
+                className="w-full h-96 object-cover"
+              />
+              <p className="absolute text-xs bottom-0 py-4 bg-black text-white w-full px-2">
+                {city.place}
+              </p>
+            </div>
+          ))}
         </div>
       );
     },
-    [cities, citiesPerSlide, navigation]
+    [cities, citiesPerSlide, navigation],
   );
 
   if (isLoading)
@@ -140,7 +144,7 @@ const Carousel = () => {
               <div
                 key={`slide-${index}`}
                 className={`w-full ${
-                  index === slideActual ? "block" : "hidden"
+                  index === slideActual ? 'block' : 'hidden'
                 }`}
               >
                 {_renderCities(index)}
@@ -154,7 +158,7 @@ const Carousel = () => {
                   key={`slide-${index}`}
                   onClick={() => setSlideActual(index)}
                   className={` transition-all w-4 h-4 rounded-full mx-2 ${
-                    index === slideActual ? "bg-blue-950" : "bg-blue-200"
+                    index === slideActual ? 'bg-blue-950' : 'bg-blue-200'
                   }`}
                 ></button>
               ))}

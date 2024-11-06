@@ -1,5 +1,5 @@
-import Carousel from "../components/Carousel";
-import HeroBanner from "../components/HeroBanner";
+import Carousel from '../components/Carousel';
+import HeroBanner from '../components/HeroBanner';
 
 const LandingPage = () => {
   return (
